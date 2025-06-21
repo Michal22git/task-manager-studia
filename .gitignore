@@ -102,3 +102,7 @@ Thumbs.db
 # Temporary files
 tmp/
 temp/ 
+# Pliki laboratoryjne (lokalne)
+Lab*.txt
+Lab*.pdf
+sprawozdanie.txt
