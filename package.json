@@ -1,0 +1,16 @@
+{
+  "name": "task-manager-studia",
+  "version": "1.0.0",
+  "description": "Aplikacja Task Manager - projekt studencki z DevOps",
+  "main": "index.html",
+  "scripts": {
+    "test": "jest",
+    "start": "node backend/server.js"
+  },
+  "keywords": ["task-manager", "todo", "studia", "devops"],
+  "author": "Micha",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+} 
