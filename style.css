@@ -1,0 +1,16 @@
+body {
+    background-color: #f3e5f5;
+    color: #4a148c;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #7b1fa2;
+    text-align: center;
+}
+
+nav {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #e1bee7;
+} 
