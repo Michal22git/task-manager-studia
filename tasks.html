@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager - Zarządzaj Zadaniami</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .task-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .task-form {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #8B5CF6, #A855F7);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #7C3AED, #9333EA);
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .tasks-list {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .task-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .task-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+        }
+        
+        .task-meta {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .priority-badge {
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .priority-high {
+            background: #fee;
+            color: #c53030;
+        }
+        
+        .priority-medium {
+            background: #fff3cd;
+            color: #b45309;
+        }
+        
+        .priority-low {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-badge {
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-todo {
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .status-in-progress {
+            background: #cff4fc;
+            color: #055160;
+        }
+        
+        .status-completed {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .task-description {
+            color: #666;
+            margin: 1rem 0;
+            line-height: 1.5;
+        }
+        
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        
+        .success {
+            background: #d1e7dd;
+            color: #0f5132;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">📝 Task Manager</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Strona Główna</a></li>
+                <li><a href="tasks.html" class="active">Zadania</a></li>
+                <li><a href="contact.html">Kontakt</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="task-container">
+        <div class="hero">
+            <h1>📋 Zarządzaj Swoimi Zadaniami</h1>
+            <p>Dodawaj, edytuj i śledź postęp swoich zadań w czasie rzeczywistym</p>
+        </div>
+
+        <!-- Formularz dodawania zadań -->
+        <div class="task-form">
+            <h2>➕ Dodaj Nowe Zadanie</h2>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="title">Tytuł zadania:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Opis zadania:</label>
+                    <textarea id="description" name="description" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="priority">Priorytet:</label>
+                    <select id="priority" name="priority">
+                        <option value="low">🟢 Niski</option>
+                        <option value="medium" selected>🟡 Średni</option>
+                        <option value="high">🔴 Wysoki</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">✅ Dodaj Zadanie</button>
+            </form>
+        </div>
+
+        <!-- Komunikaty -->
+        <div id="messages"></div>
+
+        <!-- Lista zadań -->
+        <div class="tasks-section">
+            <h2>📝 Twoje Zadania</h2>
+            <div id="tasksContainer" class="loading">
+                Ładowanie zadań...
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // API Base URL
+        const API_BASE = '/api';
+        
+        // DOM Elements
+        const taskForm = document.getElementById('taskForm');
+        const tasksContainer = document.getElementById('tasksContainer');
+        const messagesContainer = document.getElementById('messages');
+
+        // Utilities
+        function showMessage(message, type = 'success') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type;
+            messageDiv.textContent = message;
+            messagesContainer.innerHTML = '';
+            messagesContainer.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('pl-PL', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // API Functions
+        async function fetchTasks() {
+            try {
+                const response = await fetch(`${API_BASE}/tasks`);
+                const data = await response.json();
+                return data.tasks || [];
+            } catch (error) {
+                console.error('Błąd pobierania zadań:', error);
+                showMessage('Błąd pobierania zadań', 'error');
+                return [];
+            }
+        }
+
+        async function createTask(taskData) {
+            try {
+                const response = await fetch(`${API_BASE}/tasks`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(taskData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage('✅ Zadanie zostało dodane!');
+                    return result.task;
+                } else {
+                    showMessage(result.error || 'Błąd dodawania zadania', 'error');
+                    return null;
+                }
+            } catch (error) {
+                console.error('Błąd tworzenia zadania:', error);
+                showMessage('Błąd dodawania zadania', 'error');
+                return null;
+            }
+        }
+
+        async function updateTaskStatus(taskId, status) {
+            try {
+                const response = await fetch(`${API_BASE}/tasks/${taskId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage('📝 Status zadania został zaktualizowany!');
+                    return result.task;
+                } else {
+                    showMessage(result.error || 'Błąd aktualizacji zadania', 'error');
+                    return null;
+                }
+            } catch (error) {
+                console.error('Błąd aktualizacji zadania:', error);
+                showMessage('Błąd aktualizacji zadania', 'error');
+                return null;
+            }
+        }
+
+        async function deleteTask(taskId) {
+            if (!confirm('Czy na pewno chcesz usunąć to zadanie?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/tasks/${taskId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage('🗑️ Zadanie zostało usunięte!');
+                    return true;
+                } else {
+                    showMessage(result.error || 'Błąd usuwania zadania', 'error');
+                    return false;
+                }
+            } catch (error) {
+                console.error('Błąd usuwania zadania:', error);
+                showMessage('Błąd usuwania zadania', 'error');
+                return false;
+            }
+        }
+
+        // UI Functions
+        function renderTasks(tasks) {
+            if (tasks.length === 0) {
+                tasksContainer.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #666;">
+                        <h3>🤷‍♂️ Brak zadań</h3>
+                        <p>Dodaj swoje pierwsze zadanie powyżej!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            tasksContainer.innerHTML = tasks.map(task => `
+                <div class="task-card" data-task-id="${task.id}">
+                    <div class="task-header">
+                        <h3 class="task-title">${task.title}</h3>
+                        <div class="task-meta">
+                            <span class="priority-badge priority-${task.priority}">
+                                ${task.priority === 'high' ? '🔴' : task.priority === 'medium' ? '🟡' : '🟢'} 
+                                ${task.priority === 'high' ? 'Wysoki' : task.priority === 'medium' ? 'Średni' : 'Niski'}
+                            </span>
+                            <span class="status-badge status-${task.status}">
+                                ${task.status === 'completed' ? '✅' : task.status === 'in-progress' ? '🔄' : '📋'} 
+                                ${task.status === 'completed' ? 'Ukończone' : task.status === 'in-progress' ? 'W trakcie' : 'Do zrobienia'}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="task-description">${task.description}</p>
+                    
+                    <div style="font-size: 0.8rem; color: #999; margin-bottom: 1rem;">
+                        📅 Utworzono: ${formatDate(task.createdAt)}
+                        ${task.updatedAt ? `<br>📝 Zaktualizowano: ${formatDate(task.updatedAt)}` : ''}
+                    </div>
+                    
+                    <div class="task-actions">
+                        ${task.status !== 'completed' ? `
+                            <button class="btn btn-warning" onclick="updateStatus(${task.id}, '${task.status === 'todo' ? 'in-progress' : 'completed'}')">
+                                ${task.status === 'todo' ? '▶️ Rozpocznij' : '✅ Ukończ'}
+                            </button>
+                        ` : ''}
+                        
+                        ${task.status === 'completed' ? `
+                            <button class="btn btn-success" onclick="updateStatus(${task.id}, 'todo')">
+                                🔄 Przywróć
+                            </button>
+                        ` : ''}
+                        
+                        <button class="btn btn-danger" onclick="removeTask(${task.id})">
+                            🗑️ Usuń
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Event Handlers
+        window.updateStatus = async function(taskId, status) {
+            const success = await updateTaskStatus(taskId, status);
+            if (success) {
+                loadTasks();
+            }
+        };
+
+        window.removeTask = async function(taskId) {
+            const success = await deleteTask(taskId);
+            if (success) {
+                loadTasks();
+            }
+        };
+
+        // Main Functions
+        async function loadTasks() {
+            tasksContainer.innerHTML = '<div class="loading">Ładowanie zadań...</div>';
+            const tasks = await fetchTasks();
+            renderTasks(tasks);
+        }
+
+        // Form Submit Handler
+        taskForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(taskForm);
+            const taskData = {
+                title: formData.get('title'),
+                description: formData.get('description'),
+                priority: formData.get('priority')
+            };
+            
+            const newTask = await createTask(taskData);
+            
+            if (newTask) {
+                taskForm.reset();
+                loadTasks();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTasks();
+        });
+    </script>
+</body>
+</html> 
