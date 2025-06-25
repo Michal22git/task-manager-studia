@@ -15,11 +15,8 @@ COPY . .
 # Otwieramy port dla aplikacji
 EXPOSE 3000
 
-# Instalujemy http-server globalnie dla serwowania plików statycznych
-RUN npm install -g http-server
-
-# Komenda startowa - uruchamiamy backend i frontend jednocześnie
-CMD ["sh", "-c", "node backend/server.js & http-server . -p 3000 -c-1"]
+# Komenda startowa - uruchamiamy backend Express który serwuje również pliki statyczne
+CMD ["node", "backend/server.js"]
 
 # Metadata
 LABEL maintainer="Michal <michal@example.com>"
