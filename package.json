@@ -5,12 +5,30 @@
   "main": "index.html",
   "scripts": {
     "test": "jest",
-    "start": "node backend/server.js"
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "docker:build": "docker build -t task-manager:latest .",
+    "docker:run": "docker run -p 3000:3000 task-manager:latest",
+    "compose:up": "docker-compose up -d",
+    "compose:down": "docker-compose down"
   },
-  "keywords": ["task-manager", "todo", "studia", "devops"],
-  "author": "Micha",
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "frontend/**/*.js",
+      "backend/**/*.js",
+      "!**/node_modules/**"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageReporters": ["text", "lcov", "html"]
+  },
+  "keywords": ["task-manager", "todo", "studia", "devops", "docker", "ci-cd"],
+  "author": "Michal",
   "license": "MIT",
   "devDependencies": {
-    "jest": "^29.0.0"
+    "jest": "^29.0.0",
+    "nodemon": "^3.0.0"
   }
 } 

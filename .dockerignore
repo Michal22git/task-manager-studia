@@ -1,0 +1,37 @@
+# Pliki i katalogi do wykluczenia z Docker build
+
+# Git
+.git
+.gitignore
+
+# Node modules (będą zainstalowane w kontenerze)
+node_modules/
+npm-debug.log*
+
+# Pliki tymczasowe
+*.tmp
+*.temp
+.DS_Store
+
+# IDE i edytory
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Pliki laboratoryjne
+Lab*.txt
+Lab*.pdf
+sprawozdanie.txt
+
+# Dokumenty README (opcjonalnie)
+README.md
+docs/
+
+# Logi
+*.log
+
+# Docker files (nie kopiujemy siebie)
+Dockerfile
+.dockerignore
+docker-compose.yml 
